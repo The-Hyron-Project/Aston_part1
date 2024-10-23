@@ -1,5 +1,8 @@
 package com.example.Enemy;
 
+import com.example.Hero.Hero;
+import java.util.Random;
+
 public class Enemy implements Mortal{
   int hp;
 
@@ -15,15 +18,27 @@ public class Enemy implements Mortal{
     this.hp = hp;
   }
 
-  public void takeDamage(int damage){
+  public void takeDamage(int damage, Hero hero){
     if(isAlive()){
       if(hp>damage){
         hp=hp-damage;
         System.out.println("Враг получает " + damage + " урона. У врага осталось " + hp + " очков здоровья.");
+        returnDamage(hero);
       }else{
         hp=0;
         System.out.println("Враг погибает.");
       }
+    }
+  }
+
+  public void returnDamage(Hero hero){
+    if(isAlive()){
+      Random random = new Random();
+      int returnDamage = random.nextInt(25 - 1 + 1) + 1;
+      System.out.println("Враг наносит " + returnDamage + " ответного урона");
+      hero.takeDamage(returnDamage);
+    }else{
+      System.out.println("Враг погиб.");
     }
   }
 
