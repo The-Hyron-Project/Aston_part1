@@ -1,62 +1,61 @@
 package com.example.MyArrayList;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
-public class MyArrayList<E extends Comparable<E>>  implements Comparator<E> {
-  Object[] elementData;
+public class MyArrayList<T> {
+  T[] elementData;
   private static final int DEFAULT_CAPACITY = 5;
   private int size;
   private int lastInsertedPosition = -1;
-  Object[] elementTemporalCopy;
+  T[] elementTemporalCopy;
   boolean isSorted = false;
 
   public MyArrayList(){
-    this.elementData = new Object[DEFAULT_CAPACITY];
+    this.elementData = (T[]) new Object[DEFAULT_CAPACITY];
     size = DEFAULT_CAPACITY;
   }
 
   public MyArrayList(int sizeForCreation){
     if(sizeForCreation >=0){
-      this.elementData = new Object[sizeForCreation];
+      this.elementData = (T[]) new Object[sizeForCreation];
       this.size = sizeForCreation;
     }else{
       System.out.println("Указан некорректный размер массива.");
     }
   }
 
-  public void add(E e){
+  public void add(T t){
     lastInsertedPosition++;
     if(lastInsertedPosition>size-1){
       increaseSize();
     }
     isSorted = false;
-    elementData[lastInsertedPosition]=e;
+    elementData[lastInsertedPosition]= t;
   }
 
-  public void addAll(Collection<E> c){
+  public void addAll(Collection<? extends T> c){
     isSorted = false;
-    for (E position : c) {
+    for (T position : c) {
       this.add(position);
     }
   }
 
   private void increaseSize(){
     int newSize = size + size/2;
-    elementTemporalCopy = new Object[newSize];
+    elementTemporalCopy = (T[]) new Object[newSize];
     System.arraycopy(elementData, 0, elementTemporalCopy, 0, size);
-    elementData = new Object[newSize];
+    elementData = (T[]) new Object[newSize];
     System.arraycopy(elementTemporalCopy, 0, elementData, 0, size);
     size = newSize;
   }
 
-  public E get(int i){
+  public T get(int i){
     if(i>lastInsertedPosition){
       System.out.println("Указан некорректный индекс элемента.");
       return null;
     }else{
-      return (E) elementData[i];
+      return (T) elementData[i];
     }
   }
 
@@ -74,20 +73,20 @@ public class MyArrayList<E extends Comparable<E>>  implements Comparator<E> {
     return lastInsertedPosition;
   }
 
-  public MyArrayList(Collection<E> c){
-    this.elementData = new Object[c.size()];
+  public MyArrayList(Collection<? extends T> c){
+    this.elementData = (T[]) new Object[c.size()];
     this.size = c.size();
-    for (E position : c) {
+    for (T position : c) {
       this.add(position);
     }
   }
 
-  public void sort(){
+  public <E extends Comparable<E>> void sort(){
     for(int i = 0;lastInsertedPosition>=i;i++){
       for(int y = 0;lastInsertedPosition>=y;y++){
-       if(compare((E) elementData[i], (E) elementData[y]) < 0){
-         E x = (E) elementData[i];
-         E z = (E) elementData[y];
+       if(this.compare((E) elementData[i], (E) elementData[y]) < 0){
+         T x = (T) elementData[i];
+         T z = (T) elementData[y];
          elementData[i] = z;
          elementData[y] = x;
        }
@@ -95,7 +94,7 @@ public class MyArrayList<E extends Comparable<E>>  implements Comparator<E> {
     }
   }
 
-  public int compare(E e1, E e2) {
+  private <E extends Comparable<E>> int compare(E e1, E e2) {
     return e1.compareTo(e2);
   }
 
@@ -114,6 +113,5 @@ public class MyArrayList<E extends Comparable<E>>  implements Comparator<E> {
 
   private static <E extends Comparable<E>> int staticCompare(E e1, E e2) {
     return e1.compareTo(e2);
-
   }
 }
