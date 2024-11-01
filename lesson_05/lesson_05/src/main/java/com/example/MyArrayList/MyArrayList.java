@@ -70,7 +70,11 @@ public class MyArrayList<T> {
   }
 
   public int getSize(){
-    return lastInsertedPosition;
+    if(lastInsertedPosition<0){
+      return 0;
+    }else{
+      return lastInsertedPosition;
+    }
   }
 
   public MyArrayList(Collection<? extends T> c){
@@ -82,15 +86,20 @@ public class MyArrayList<T> {
   }
 
   public <E extends Comparable<E>> void sort(){
-    for(int i = 0;lastInsertedPosition>=i;i++){
-      for(int y = 0;lastInsertedPosition>=y;y++){
-       if(this.compare((E) elementData[i], (E) elementData[y]) < 0){
-         T x = (T) elementData[i];
-         T z = (T) elementData[y];
-         elementData[i] = z;
-         elementData[y] = x;
-       }
+    if(!isSorted){
+      for(int i = 0;lastInsertedPosition>=i;i++){
+        for(int y = 0;lastInsertedPosition>=y;y++){
+          if(this.compare((E) elementData[i], (E) elementData[y]) < 0){
+            T x = (T) elementData[i];
+            T z = (T) elementData[y];
+            elementData[i] = z;
+            elementData[y] = x;
+          }
+        }
       }
+      isSorted = true;
+    }else{
+      System.out.println("Сортировка уже выполнена.");
     }
   }
 
